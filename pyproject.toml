@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools==65.6.3", "wheel==0.38.4"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-regression-workbench"
+version = "0.1.0"
+description = "Reproducible LLM evaluations, release gates and human review"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Abhishek Saini"}]
+
+[project.scripts]
+regression = "regression_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["regression_workbench*"]
