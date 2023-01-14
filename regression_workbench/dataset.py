@@ -18,3 +18,19 @@ def validate(dataset):
     if not isinstance(dataset.get('cases'), list):
         raise ValueError('dataset.cases must be a list')
     return dataset
+
+_validate_envelope = validate
+TASKS = {'extraction', 'schema', 'summary', 'tool'}
+
+def validate(dataset):
+    _validate_envelope(dataset)
+    for case in dataset['cases']:
+        if not isinstance(case, dict) or not isinstance(case.get('id'), str) or not case['id'].strip():
+            raise ValueError('case.id is required')
+        if case.get('task') not in TASKS:
+            raise ValueError('unsupported case.task')
+        if not isinstance(case.get('input'), str):
+            raise ValueError('case.input must be text')
+        if not isinstance(case.get('expected'), dict):
+            raise ValueError('case.expected must be an object')
+    return dataset
