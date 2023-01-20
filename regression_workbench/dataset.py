@@ -34,3 +34,12 @@ def validate(dataset):
         if not isinstance(case.get('expected'), dict):
             raise ValueError('case.expected must be an object')
     return dataset
+
+_validate_cases = validate
+
+def validate(dataset):
+    _validate_cases(dataset)
+    ids = [c['id'] for c in dataset['cases']]
+    if len(ids) != len(set(ids)):
+        raise ValueError('case identifiers must be unique')
+    return dataset
