@@ -43,3 +43,13 @@ def validate(dataset):
     if len(ids) != len(set(ids)):
         raise ValueError('case identifiers must be unique')
     return dataset
+
+_validate_unique = validate
+
+def validate(dataset):
+    _validate_unique(dataset)
+    for case in dataset['cases']:
+        slices = case.get('slices', [])
+        if not isinstance(slices, list) or not all(isinstance(s,str) and s.strip() for s in slices) or len(slices)!=len(set(slices)):
+            raise ValueError('slices must be unique nonempty strings')
+    return dataset
