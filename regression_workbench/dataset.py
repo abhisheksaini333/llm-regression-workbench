@@ -53,3 +53,7 @@ def validate(dataset):
         if not isinstance(slices, list) or not all(isinstance(s,str) and s.strip() for s in slices) or len(slices)!=len(set(slices)):
             raise ValueError('slices must be unique nonempty strings')
     return dataset
+
+def fingerprint(dataset):
+    validate(dataset)
+    return digest(dict(dataset, cases=sorted(dataset['cases'], key=lambda c:c['id'])))
