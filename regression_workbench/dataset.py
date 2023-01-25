@@ -57,3 +57,7 @@ def validate(dataset):
 def fingerprint(dataset):
     validate(dataset)
     return digest(dict(dataset, cases=sorted(dataset['cases'], key=lambda c:c['id'])))
+
+def load(path):
+    from pathlib import Path
+    return validate(json.loads(Path(path).read_text(encoding='utf-8')))
