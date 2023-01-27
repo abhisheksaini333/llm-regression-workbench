@@ -61,3 +61,7 @@ def fingerprint(dataset):
 def load(path):
     from pathlib import Path
     return validate(json.loads(Path(path).read_text(encoding='utf-8')))
+
+def select(dataset, task=None, slice_name=None):
+    validate(dataset)
+    return dict(dataset, cases=[c for c in dataset['cases'] if (task is None or c['task']==task) and (slice_name is None or slice_name in c.get('slices',[]))])
