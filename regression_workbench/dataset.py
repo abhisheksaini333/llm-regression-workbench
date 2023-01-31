@@ -65,3 +65,8 @@ def load(path):
 def select(dataset, task=None, slice_name=None):
     validate(dataset)
     return dict(dataset, cases=[c for c in dataset['cases'] if (task is None or c['task']==task) and (slice_name is None or slice_name in c.get('slices',[]))])
+
+def diff(before, after):
+    validate(before); validate(after)
+    a={c['id']:c for c in before['cases']}; b={c['id']:c for c in after['cases']}
+    return {'added':sorted(b.keys()-a.keys()), 'removed':sorted(a.keys()-b.keys()), 'changed':sorted(k for k in a.keys()&b.keys() if a[k]!=b[k])}
