@@ -13,3 +13,7 @@ def validate(config):
         raise ValueError('temperature outside [0,2]')
     digest(config)
     return config
+
+def render(config, text):
+    validate(config)
+    return config['prompt'].replace('{input}',text)
