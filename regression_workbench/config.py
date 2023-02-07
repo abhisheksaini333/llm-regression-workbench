@@ -17,3 +17,7 @@ def validate(config):
 def render(config, text):
     validate(config)
     return config['prompt'].replace('{input}',text)
+
+def run_identity(dataset_hash, config, seed=0):
+    validate(config)
+    return digest({'dataset':dataset_hash,'config':config,'seed':seed,'evaluator_version':1})
