@@ -21,3 +21,18 @@ def render(config, text):
 def run_identity(dataset_hash, config, seed=0):
     validate(config)
     return digest({'dataset':dataset_hash,'config':config,'seed':seed,'evaluator_version':1})
+
+_validate_model = validate
+
+def validate(config):
+    _validate_model(config)
+    def walk(value):
+        if isinstance(value,dict):
+            for key,item in value.items():
+                if any(secret in key.lower() for secret in ('api_key','password','secret','authorization','access_token')):
+                    raise ValueError('credentials must be provided through the environment')
+                walk(item)
+        elif isinstance(value,list):
+            for item in value: walk(item)
+    walk(config)
+    return config
