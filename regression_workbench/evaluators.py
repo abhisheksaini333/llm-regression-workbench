@@ -18,3 +18,9 @@ def extraction(output, expected):
     if value is None: return result(0,'invalid JSON object')
     matches={key:key in value and value[key]==item for key,item in expected.items()}
     return result(sum(matches.values())/len(matches) if matches else 1,'field accuracy',{'fields':matches})
+
+def schema(output, expected):
+    value=parse_object(output)
+    if value is None: return result(0,'invalid JSON object')
+    missing=[key for key in expected.get('required',[]) if key not in value]
+    return result(not missing,'schema requirements',{'errors':['missing '+key for key in missing]})
