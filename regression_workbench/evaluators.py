@@ -50,3 +50,9 @@ def schema(output, expected):
     if expected.get('additionalProperties') is False:
         errors.extend('unexpected '+key for key in value.keys()-expected.get('properties',{}).keys())
     return result(not errors,'schema validation',{'errors':errors})
+
+def summary(output, expected):
+    words=set(re.findall(r"[\w'-]+",output.casefold()))
+    keywords=expected.get('keywords',[])
+    matched=[word for word in keywords if word.casefold() in words]
+    return result(len(matched)/len(keywords) if keywords else 1,'keyword coverage',{'matched':matched,'word_count':len(output.split())})
