@@ -38,3 +38,15 @@ def schema(output, expected):
             if spec['type'] not in types: raise ValueError('unsupported schema type')
             if not types[spec['type']](value[key]): errors.append('wrong type '+key)
     return result(not errors,'schema validation',{'errors':errors})
+
+_schema_types=schema
+
+def schema(output, expected):
+    checked=_schema_types(output,expected); value=parse_object(output)
+    if value is None: return checked
+    errors=list(checked['details']['errors'])
+    for key,spec in expected.get('properties',{}).items():
+        if key in value and 'enum' in spec and value[key] not in spec['enum']: errors.append('invalid enum '+key)
+    if expected.get('additionalProperties') is False:
+        errors.extend('unexpected '+key for key in value.keys()-expected.get('properties',{}).keys())
+    return result(not errors,'schema validation',{'errors':errors})
