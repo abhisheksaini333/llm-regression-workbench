@@ -56,3 +56,13 @@ def summary(output, expected):
     keywords=expected.get('keywords',[])
     matched=[word for word in keywords if word.casefold() in words]
     return result(len(matched)/len(keywords) if keywords else 1,'keyword coverage',{'matched':matched,'word_count':len(output.split())})
+
+_summary_coverage=summary
+
+def summary(output,expected):
+    checked=_summary_coverage(output,expected)
+    violations=[]
+    if len(output.split())>expected.get('max_words',100000): violations.append('length limit')
+    for claim in expected.get('forbidden',[]):
+        if claim.casefold() in output.casefold(): violations.append('forbidden claim: '+claim)
+    return result(0 if violations else checked['score'],'summary constraints' if violations else checked['reason'],dict(checked['details'],violations=violations))
