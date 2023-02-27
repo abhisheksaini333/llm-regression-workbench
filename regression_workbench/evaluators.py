@@ -66,3 +66,9 @@ def summary(output,expected):
     for claim in expected.get('forbidden',[]):
         if claim.casefold() in output.casefold(): violations.append('forbidden claim: '+claim)
     return result(0 if violations else checked['score'],'summary constraints' if violations else checked['reason'],dict(checked['details'],violations=violations))
+
+def tool(output,expected):
+    value=parse_object(output)
+    if value is None: return result(0,'invalid tool JSON')
+    correct=value.get('tool')==expected.get('tool')
+    return result(correct,'tool selection',{'name_correct':correct})
