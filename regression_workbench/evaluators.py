@@ -72,3 +72,12 @@ def tool(output,expected):
     if value is None: return result(0,'invalid tool JSON')
     correct=value.get('tool')==expected.get('tool')
     return result(correct,'tool selection',{'name_correct':correct})
+
+_tool_name=tool
+
+def tool(output,expected):
+    checked=_tool_name(output,expected);value=parse_object(output)
+    if not checked['score']: return checked
+    args=value.get('arguments',{})
+    correct=isinstance(args,dict) and all(k in args and args[k]==v for k,v in expected.get('arguments',{}).items())
+    return result(correct,'tool arguments',dict(checked['details'],arguments_correct=correct))
