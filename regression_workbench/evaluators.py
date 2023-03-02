@@ -81,3 +81,9 @@ def tool(output,expected):
     args=value.get('arguments',{})
     correct=isinstance(args,dict) and all(k in args and args[k]==v for k,v in expected.get('arguments',{}).items())
     return result(correct,'tool arguments',dict(checked['details'],arguments_correct=correct))
+
+def evaluate(case, output):
+    functions={'extraction':extraction,'schema':schema,'summary':summary,'tool':tool}
+    if case['task'] not in functions: raise ValueError('unsupported task')
+    scored=functions[case['task']](output,case['expected'])
+    return dict(scored,version=1,task=case['task'])
