@@ -87,3 +87,8 @@ def evaluate(case, output):
     if case['task'] not in functions: raise ValueError('unsupported task')
     scored=functions[case['task']](output,case['expected'])
     return dict(scored,version=1,task=case['task'])
+
+def aggregate(results):
+    grouped={}
+    for item in results: grouped.setdefault(item['task'],[]).append(item['score'])
+    return {task:{'count':len(scores),'mean':sum(scores)/len(scores)} for task,scores in sorted(grouped.items())}
