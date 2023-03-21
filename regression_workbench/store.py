@@ -16,3 +16,13 @@ class Store:
     def close(self): self.connection.close()
     def __enter__(self): return self
     def __exit__(self,*exc): self.close()
+
+    def register(self,run_id,dataset_hash,config,seed,expected_count):
+        encoded=json.dumps(sanitize(config,self.secrets),sort_keys=True,allow_nan=False)
+        with self.connection:
+            row=self.connection.execute('SELECT * FROM runs WHERE id=?',(run_id,)).fetchone()
+            if row:
+                if (row['dataset_hash'],row['config'],row['seed'],row['expected_count'])!=(dataset_hash,encoded,seed,expected_count):
+                    raise ValueError('run identity collision')
+                return
+            self.connection.execute('INSERT INTO runs(id,dataset_hash,config,seed,expected_count,created) VALUES (?,?,?,?,?,?)',(run_id,dataset_hash,encoded,seed,expected_count,time.time()))
