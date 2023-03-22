@@ -26,3 +26,12 @@ class Store:
                     raise ValueError('run identity collision')
                 return
             self.connection.execute('INSERT INTO runs(id,dataset_hash,config,seed,expected_count,created) VALUES (?,?,?,?,?,?)',(run_id,dataset_hash,encoded,seed,expected_count,time.time()))
+
+    def save_result(self,run_id,case_id,payload):
+        encoded=json.dumps(sanitize(payload,self.secrets),sort_keys=True,allow_nan=False)
+        with self.connection:
+            existing=self.connection.execute('SELECT payload FROM results WHERE run_id=? AND case_id=?',(run_id,case_id)).fetchone()
+            if existing:
+                if existing['payload']!=encoded: raise ValueError('case result is immutable')
+                return
+            self.connection.execute('INSERT INTO results VALUES (?,?,?)',(run_id,case_id,encoded))
