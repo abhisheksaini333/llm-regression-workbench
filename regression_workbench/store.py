@@ -35,3 +35,14 @@ class Store:
                 if existing['payload']!=encoded: raise ValueError('case result is immutable')
                 return
             self.connection.execute('INSERT INTO results VALUES (?,?,?)',(run_id,case_id,encoded))
+
+    def results(self,run_id):
+        return [dict(json.loads(row['payload']),case_id=row['case_id']) for row in self.connection.execute('SELECT * FROM results WHERE run_id=? ORDER BY case_id',(run_id,))]
+    def get_run(self,run_id):
+        row=self.connection.execute('SELECT * FROM runs WHERE id=?',(run_id,)).fetchone()
+        if not row: raise KeyError('run not found')
+        value=dict(row);value['config']=json.loads(value['config'])
+        value['completed']=self.connection.execute('SELECT count(*) FROM results WHERE run_id=?',(run_id,)).fetchone()[0]
+        return value
+    def list_runs(self):
+        return [self.get_run(row['id']) for row in self.connection.execute('SELECT id FROM runs ORDER BY created DESC,id')]
