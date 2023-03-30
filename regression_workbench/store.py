@@ -46,3 +46,9 @@ class Store:
         return value
     def list_runs(self):
         return [self.get_run(row['id']) for row in self.connection.execute('SELECT id FROM runs ORDER BY created DESC,id')]
+
+    def record_attempt(self,run_id,case_id,payload):
+        with self.connection:
+            self.connection.execute('INSERT INTO attempts(run_id,case_id,payload) VALUES (?,?,?)',(run_id,case_id,json.dumps(sanitize(payload,self.secrets),allow_nan=False)))
+    def attempts(self,run_id):
+        return [dict(json.loads(row['payload']),case_id=row['case_id']) for row in self.connection.execute('SELECT * FROM attempts WHERE run_id=? ORDER BY id',(run_id,))]
