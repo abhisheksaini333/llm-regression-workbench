@@ -52,3 +52,10 @@ class Store:
             self.connection.execute('INSERT INTO attempts(run_id,case_id,payload) VALUES (?,?,?)',(run_id,case_id,json.dumps(sanitize(payload,self.secrets),allow_nan=False)))
     def attempts(self,run_id):
         return [dict(json.loads(row['payload']),case_id=row['case_id']) for row in self.connection.execute('SELECT * FROM attempts WHERE run_id=? ORDER BY id',(run_id,))]
+
+    def claim(self,run_id,owner,lease_seconds=300,now=None):
+        if lease_seconds<=0: raise ValueError('lease must be positive')
+        now=time.time() if now is None else now
+        with self.connection:
+            cursor=self.connection.execute("UPDATE runs SET owner=?,lease_until=?,status='running' WHERE id=? AND (owner IS NULL OR owner=? OR lease_until<=?)",(owner,now+lease_seconds,run_id,owner,now))
+            if cursor.rowcount!=1: raise RuntimeError('run leased by another worker or missing')
