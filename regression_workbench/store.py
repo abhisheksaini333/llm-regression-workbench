@@ -59,3 +59,14 @@ class Store:
         with self.connection:
             cursor=self.connection.execute("UPDATE runs SET owner=?,lease_until=?,status='running' WHERE id=? AND (owner IS NULL OR owner=? OR lease_until<=?)",(owner,now+lease_seconds,run_id,owner,now))
             if cursor.rowcount!=1: raise RuntimeError('run leased by another worker or missing')
+
+    def save_owned_result(self,run_id,case_id,payload,owner):
+        # IMMEDIATE serializes ownership validation with immutable result insertion.
+        self.connection.execute('BEGIN IMMEDIATE')
+        try:
+            row=self.connection.execute('SELECT owner FROM runs WHERE id=?',(run_id,)).fetchone()
+            if not row or row['owner']!=owner: raise RuntimeError('worker lease lost')
+            self.save_result(run_id,case_id,payload)
+            self.connection.commit()
+        except BaseException:
+            self.connection.rollback();raise
