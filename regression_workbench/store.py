@@ -70,3 +70,11 @@ class Store:
             self.connection.commit()
         except BaseException:
             self.connection.rollback();raise
+
+    def finish(self,run_id,owner,status):
+        if status not in {'complete','paused','failed'}: raise ValueError('invalid terminal status')
+        run=self.get_run(run_id)
+        if status=='complete' and run['completed']!=run['expected_count']: raise ValueError('run incomplete')
+        with self.connection:
+            cursor=self.connection.execute('UPDATE runs SET status=?,owner=NULL,lease_until=0 WHERE id=? AND owner=?',(status,run_id,owner))
+            if cursor.rowcount!=1: raise RuntimeError('worker lease lost')
