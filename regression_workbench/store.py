@@ -78,3 +78,8 @@ class Store:
         with self.connection:
             cursor=self.connection.execute('UPDATE runs SET status=?,owner=NULL,lease_until=0 WHERE id=? AND owner=?',(status,run_id,owner))
             if cursor.rowcount!=1: raise RuntimeError('worker lease lost')
+
+    def backup(self,path):
+        target=sqlite3.connect(str(path))
+        try: self.connection.backup(target)
+        finally: target.close()
