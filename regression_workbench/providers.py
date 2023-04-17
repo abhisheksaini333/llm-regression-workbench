@@ -15,3 +15,11 @@ class Response:
         if self.usage_kind not in {'tokens','estimated_words','unknown'}: raise ValueError('invalid usage kind')
 
 class RetryableError(RuntimeError): pass
+
+class FixtureProvider:
+    name='fixture'
+    def __init__(self,outputs): self.outputs=dict(outputs)
+    def generate(self,prompt,case,config):
+        if case['id'] not in self.outputs: raise ValueError('missing fixture output for '+case['id'])
+        output=self.outputs[case['id']]
+        return Response(output,len(prompt.split()),len(output.split()),'estimated_words',{'provider':'fixture'})
