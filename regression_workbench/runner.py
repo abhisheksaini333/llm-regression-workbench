@@ -14,7 +14,10 @@ def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,leas
     store.claim(identity,owner,lease_seconds)
     completed=0
     try:
+        done={r['case_id'] for r in store.results(identity)}
         for case in sorted(dataset['cases'],key=lambda c:c['id']):
+            if case['id'] in done: continue
+            store.claim(identity,owner,lease_seconds)
             prompt=configs.render(config,case['input'])
             started=time.perf_counter()
             response=provider.generate(prompt,case,config)
