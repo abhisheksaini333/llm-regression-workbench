@@ -25,6 +25,8 @@ def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,leas
             payload=dict(scored,slices=case.get('slices',[]),output=response.output,prompt=prompt,trace=response.trace,latency_ms=(time.perf_counter()-started)*1000,input_tokens=response.input_tokens,output_tokens=response.output_tokens,usage_kind=response.usage_kind,status='ok')
             store.save_owned_result(identity,case['id'],payload,owner)
             completed+=1
+            if stop_after is not None and completed>=stop_after:
+                store.finish(identity,owner,'paused');return identity
         store.finish(identity,owner,'complete')
         return identity
     except BaseException:
