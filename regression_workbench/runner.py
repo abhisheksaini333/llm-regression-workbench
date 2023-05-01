@@ -20,14 +20,20 @@ def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,leas
             store.claim(identity,owner,lease_seconds)
             prompt=configs.render(config,case['input'])
             started=time.perf_counter()
+            response=None
+            failure=None
             for attempt in range(1,max_attempts+1):
                 try:
                     response=provider.generate(prompt,case,config)
                     break
                 except RetryableError as error:
                     store.record_attempt(identity,case['id'],{'attempt':attempt,'error':str(error),'retryable':True})
-                    if attempt==max_attempts: raise
+                    if attempt==max_attempts: failure=str(error)
                     sleep(min(0.05*2**(attempt-1),1.0))
+            if response is None:
+                payload={'task':case['task'],'slices':case.get('slices',[]),'score':0.0,'reason':'provider retry budget exhausted','status':'error','error':failure,'output':'','latency_ms':(time.perf_counter()-started)*1000,'input_tokens':0,'output_tokens':0,'usage_kind':'unknown'}
+                store.save_owned_result(identity,case['id'],payload,owner)
+                continue
             scored=evaluators.evaluate(case,response.output)
             payload=dict(scored,slices=case.get('slices',[]),output=response.output,prompt=prompt,trace=response.trace,latency_ms=(time.perf_counter()-started)*1000,input_tokens=response.input_tokens,output_tokens=response.output_tokens,usage_kind=response.usage_kind,status='ok')
             store.save_owned_result(identity,case['id'],payload,owner)
