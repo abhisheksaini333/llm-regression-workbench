@@ -7,6 +7,8 @@ from .providers import RetryableError
 
 def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,lease_seconds=300,sleep=time.sleep):
     datasets.validate(dataset);configs.validate(config)
+    if type(max_attempts) is not int or not 1<=max_attempts<=10: raise ValueError('max_attempts must be 1..10')
+    if stop_after is not None and (type(stop_after) is not int or stop_after<1): raise ValueError('stop_after must be positive')
     if not dataset['cases']: raise ValueError('cannot run an empty dataset')
     identity=configs.run_identity(datasets.fingerprint(dataset),config,seed)
     store.register(identity,datasets.fingerprint(dataset),config,seed,len(dataset['cases']))
