@@ -29,3 +29,12 @@ def bootstrap(values,seed=0,resamples=2000,confidence=0.95):
     means=sorted(sum(rng.choice(values) for _ in values)/len(values) for _ in range(resamples))
     tail=(1-confidence)/2
     return {'mean':sum(values)/len(values),'low':means[int(tail*(resamples-1))],'high':means[int((1-tail)*(resamples-1))],'confidence':confidence,'resamples':resamples,'seed':seed,'n':len(values)}
+
+def _summary(pairs):
+    return {'count':len(pairs),'baseline':sum(p['baseline']['score'] for p in pairs)/len(pairs),'candidate':sum(p['candidate']['score'] for p in pairs)/len(pairs),'delta':sum(p['delta'] for p in pairs)/len(pairs),'interval':bootstrap([p['delta'] for p in pairs])}
+
+def compare(baseline,candidate):
+    pairs=pair(baseline,candidate)
+    tasks=sorted({p['baseline']['task'] for p in pairs})
+    slices=sorted({s for p in pairs for s in p['baseline'].get('slices',[])})
+    return {'overall':_summary(pairs),'tasks':{t:_summary([p for p in pairs if p['baseline']['task']==t]) for t in tasks},'slices':{s:_summary([p for p in pairs if s in p['baseline'].get('slices',[])]) for s in slices},'cases':pairs}
