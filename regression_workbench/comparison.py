@@ -38,3 +38,17 @@ def compare(baseline,candidate):
     tasks=sorted({p['baseline']['task'] for p in pairs})
     slices=sorted({s for p in pairs for s in p['baseline'].get('slices',[])})
     return {'overall':_summary(pairs),'tasks':{t:_summary([p for p in pairs if p['baseline']['task']==t]) for t in tasks},'slices':{s:_summary([p for p in pairs if s in p['baseline'].get('slices',[])]) for s in slices},'cases':pairs}
+
+def gate(comparison,critical=None,max_overall_regression=0.02):
+    failures=[]
+    if comparison['overall']['delta'] < -max_overall_regression:
+        failures.append({'scope':'overall','reason':'quality regression','observed':comparison['overall']['delta'],'threshold':-max_overall_regression})
+    for name,rule in (critical or {}).items():
+        observed=comparison['slices'].get(name)
+        if observed is None:
+            failures.append({'scope':'slice','slice':name,'reason':'required slice missing'});continue
+        if observed['candidate']<rule.get('minimum',0):
+            failures.append({'scope':'slice','slice':name,'reason':'below minimum quality','observed':observed['candidate'],'threshold':rule['minimum']})
+        if observed['delta'] < -rule.get('max_regression',0):
+            failures.append({'scope':'slice','slice':name,'reason':'quality regression','observed':observed['delta'],'threshold':-rule.get('max_regression',0)})
+    return {'passed':not failures,'failures':failures}
