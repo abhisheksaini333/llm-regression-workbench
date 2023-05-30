@@ -52,3 +52,16 @@ def gate(comparison,critical=None,max_overall_regression=0.02):
         if observed['delta'] < -rule.get('max_regression',0):
             failures.append({'scope':'slice','slice':name,'reason':'quality regression','observed':observed['delta'],'threshold':-rule.get('max_regression',0)})
     return {'passed':not failures,'failures':failures}
+
+_gate_quality=gate
+
+def gate(comparison,critical=None,max_overall_regression=0.02):
+    decision=_gate_quality(comparison,critical,max_overall_regression)
+    for name,rule in (critical or {}).items():
+        observed=comparison['slices'].get(name)
+        if observed is None: continue
+        if observed['count']<rule.get('min_cases',1): decision['failures'].append({'scope':'slice','slice':name,'reason':'insufficient cases','observed':observed['count'],'threshold':rule['min_cases']})
+        if 'lower_delta_bound' in rule and observed['interval']['low']<rule['lower_delta_bound']:
+            decision['failures'].append({'scope':'slice','slice':name,'reason':'uncertainty exceeds tolerance','observed':observed['interval']['low'],'threshold':rule['lower_delta_bound']})
+    decision['passed']=not decision['failures']
+    return decision
