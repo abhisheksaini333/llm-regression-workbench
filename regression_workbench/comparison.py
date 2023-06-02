@@ -65,3 +65,9 @@ def gate(comparison,critical=None,max_overall_regression=0.02):
             decision['failures'].append({'scope':'slice','slice':name,'reason':'uncertainty exceeds tolerance','observed':observed['interval']['low'],'threshold':rule['lower_delta_bound']})
     decision['passed']=not decision['failures']
     return decision
+
+def operational(results):
+    latencies=sorted(float(r.get('latency_ms',0)) for r in results)
+    if not latencies or any(not math.isfinite(v) or v<0 for v in latencies): raise ValueError('valid latency observations required')
+    kinds=sorted({r.get('usage_kind','unknown') for r in results})
+    return {'count':len(results),'p50_ms':latencies[math.ceil(len(latencies)*0.5)-1],'p95_ms':latencies[math.ceil(len(latencies)*0.95)-1],'total_tokens':sum(r.get('input_tokens',0)+r.get('output_tokens',0) for r in results),'usage_kinds':kinds,'errors':sum(r.get('status')=='error' for r in results)}
