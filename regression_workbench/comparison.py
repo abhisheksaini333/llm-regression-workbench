@@ -71,3 +71,11 @@ def operational(results):
     if not latencies or any(not math.isfinite(v) or v<0 for v in latencies): raise ValueError('valid latency observations required')
     kinds=sorted({r.get('usage_kind','unknown') for r in results})
     return {'count':len(results),'p50_ms':latencies[math.ceil(len(latencies)*0.5)-1],'p95_ms':latencies[math.ceil(len(latencies)*0.95)-1],'total_tokens':sum(r.get('input_tokens',0)+r.get('output_tokens',0) for r in results),'usage_kinds':kinds,'errors':sum(r.get('status')=='error' for r in results)}
+
+def operational_gate(metrics,budgets):
+    failures=[]
+    for budget,metric in [('max_p95_ms','p95_ms'),('max_tokens','total_tokens'),('max_errors','errors')]:
+        if budget in budgets and metrics[metric]>budgets[budget]: failures.append({'scope':'operations','reason':metric+' budget exceeded','observed':metrics[metric],'threshold':budgets[budget]})
+    if 'max_tokens' in budgets and metrics['usage_kinds']!=['tokens']:
+        failures.append({'scope':'operations','reason':'exact token usage unavailable'})
+    return {'passed':not failures,'failures':failures}
