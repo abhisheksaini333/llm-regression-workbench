@@ -79,3 +79,16 @@ def operational_gate(metrics,budgets):
     if 'max_tokens' in budgets and metrics['usage_kinds']!=['tokens']:
         failures.append({'scope':'operations','reason':'exact token usage unavailable'})
     return {'passed':not failures,'failures':failures}
+
+def compare_runs(store,baseline_id,candidate_id,policy=None):
+    baseline=store.get_run(baseline_id);candidate=store.get_run(candidate_id)
+    if baseline['dataset_hash']!=candidate['dataset_hash']: raise ValueError('dataset fingerprints differ')
+    if baseline['status']!='complete' or candidate['status']!='complete': raise ValueError('both runs must be complete')
+    a=store.results(baseline_id);b=store.results(candidate_id)
+    comparison=compare(a,b)
+    policy=policy or {}
+    decision=gate(comparison,policy.get('critical',{}),policy.get('max_overall_regression',0.02))
+    operations={'baseline':operational(a),'candidate':operational(b)}
+    extra=operational_gate(operations['candidate'],policy.get('budgets',{'max_errors':0}))
+    decision['failures'].extend(extra['failures']);decision['passed']=not decision['failures']
+    return dict(comparison,baseline_id=baseline_id,candidate_id=candidate_id,operations=operations,gate=decision,policy=policy)
