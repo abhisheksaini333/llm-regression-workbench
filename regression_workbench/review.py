@@ -23,3 +23,16 @@ def save(store,baseline,candidate,case_id,reviewer,preference,note='',expected_r
 def list_reviews(store,baseline,candidate):
     _schema(store)
     return [dict(row) for row in store.connection.execute('SELECT * FROM reviews WHERE baseline=? AND candidate=? ORDER BY case_id,reviewer',(baseline,candidate))]
+
+def _order(case_id,reviewer):
+    return int(hashlib.sha256((case_id+'\0'+reviewer).encode()).hexdigest()[:8],16)%2
+
+def blind_pair(pair,reviewer):
+    names=['baseline','candidate'] if _order(pair['case_id'],reviewer)==0 else ['candidate','baseline']
+    return {'case_id':pair['case_id'],'A':pair[names[0]].get('output',''),'B':pair[names[1]].get('output',''),'prompt':pair['baseline'].get('prompt','')}
+
+def unblind(case_id,reviewer,choice):
+    if choice in {'tie','skip'}: return choice
+    if choice not in {'A','B'}: raise ValueError('invalid blinded choice')
+    names=['baseline','candidate'] if _order(case_id,reviewer)==0 else ['candidate','baseline']
+    return names[0 if choice=='A' else 1]
