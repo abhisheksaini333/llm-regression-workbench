@@ -36,3 +36,15 @@ def unblind(case_id,reviewer,choice):
     if choice not in {'A','B'}: raise ValueError('invalid blinded choice')
     names=['baseline','candidate'] if _order(case_id,reviewer)==0 else ['candidate','baseline']
     return names[0 if choice=='A' else 1]
+
+def judge_preference(delta,tie_threshold=0.05):
+    return 'tie' if abs(delta)<=tie_threshold else ('candidate' if delta>0 else 'baseline')
+
+def agreement(pairs,reviews,tie_threshold=0.05):
+    deltas={p['case_id']:p['delta'] for p in pairs}
+    observations=[]
+    for label in reviews:
+        if label['preference']=='skip' or label['case_id'] not in deltas: continue
+        judge=judge_preference(deltas[label['case_id']],tie_threshold)
+        observations.append({'case_id':label['case_id'],'human':label['preference'],'judge':judge,'agrees':judge==label['preference']})
+    return {'reviewed':len(observations),'agreement':sum(o['agrees'] for o in observations)/len(observations) if observations else None,'disagreements':[o for o in observations if not o['agrees']],'tie_threshold':tie_threshold}
