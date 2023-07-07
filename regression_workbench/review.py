@@ -48,3 +48,10 @@ def agreement(pairs,reviews,tie_threshold=0.05):
         judge=judge_preference(deltas[label['case_id']],tie_threshold)
         observations.append({'case_id':label['case_id'],'human':label['preference'],'judge':judge,'agrees':judge==label['preference']})
     return {'reviewed':len(observations),'agreement':sum(o['agrees'] for o in observations)/len(observations) if observations else None,'disagreements':[o for o in observations if not o['agrees']],'tie_threshold':tie_threshold}
+
+def calibrate(pairs,reviews,thresholds=(0,0.05,0.1,0.2,0.4)):
+    if len([r for r in reviews if r['preference']!='skip'])<2: raise ValueError('at least two review observations required')
+    if not thresholds or any(not 0<=v<=1 for v in thresholds): raise ValueError('thresholds must be within [0,1]')
+    candidates=[agreement(pairs,reviews,t) for t in thresholds]
+    selected=max(candidates,key=lambda c:(c['agreement'] if c['agreement'] is not None else -1,-c['tie_threshold']))
+    return {'selected_threshold':selected['tie_threshold'],'agreement':selected['agreement'],'observations':selected['reviewed'],'candidates':candidates,'scope':'calibration set only; validate on held-out reviewers/cases before promotion'}
