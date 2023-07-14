@@ -55,3 +55,10 @@ def calibrate(pairs,reviews,thresholds=(0,0.05,0.1,0.2,0.4)):
     candidates=[agreement(pairs,reviews,t) for t in thresholds]
     selected=max(candidates,key=lambda c:(c['agreement'] if c['agreement'] is not None else -1,-c['tie_threshold']))
     return {'selected_threshold':selected['tie_threshold'],'agreement':selected['agreement'],'observations':selected['reviewed'],'candidates':candidates,'scope':'calibration set only; validate on held-out reviewers/cases before promotion'}
+
+def reviewer_consistency(reviews):
+    groups={}
+    for label in reviews:
+        if label['preference']!='skip': groups.setdefault(label['case_id'],{})[label['reviewer']]=label['preference']
+    paired=[list(group.values()) for group in groups.values() if len(group)>1]
+    return {'paired_cases':len(paired),'agreement':sum(len(set(values))==1 for values in paired)/len(paired) if paired else None}
