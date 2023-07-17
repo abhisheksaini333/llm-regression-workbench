@@ -23,3 +23,26 @@ class FixtureProvider:
         if case['id'] not in self.outputs: raise ValueError('missing fixture output for '+case['id'])
         output=self.outputs[case['id']]
         return Response(output,len(prompt.split()),len(output.split()),'estimated_words',{'provider':'fixture'})
+
+class TransformersProvider:
+    name='transformers'
+    def __init__(self,path,revision,threads=2):
+        from pathlib import Path
+        if not Path(path).is_dir(): raise ValueError('local model directory is required')
+        if not revision: raise ValueError('model revision is required')
+        import torch
+        from transformers import AutoTokenizer,AutoModelForSeq2SeqLM
+        torch.set_num_threads(threads)
+        self.torch=torch
+        self.revision=revision
+        self.tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True)
+        self.model=AutoModelForSeq2SeqLM.from_pretrained(path,local_files_only=True)
+        self.model.eval()
+    def generate(self,prompt,case,config):
+        maximum=config.get('parameters',{}).get('max_new_tokens',64)
+        if type(maximum) is not int or not 1<=maximum<=256: raise ValueError('max_new_tokens must be 1..256')
+        inputs=self.tokenizer(prompt,return_tensors='pt',truncation=True,max_length=512)
+        with self.torch.no_grad():
+            output=self.model.generate(**inputs,max_new_tokens=maximum,do_sample=False,num_beams=1)
+        text=self.tokenizer.decode(output[0],skip_special_tokens=True)
+        return Response(text,int(inputs['input_ids'].numel()),int(output[0].numel())-1,'tokens',{'provider':self.name,'revision':self.revision,'deterministic':True})
