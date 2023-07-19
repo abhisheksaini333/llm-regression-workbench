@@ -10,6 +10,7 @@ def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,leas
     if type(max_attempts) is not int or not 1<=max_attempts<=10: raise ValueError('max_attempts must be 1..10')
     if stop_after is not None and (type(stop_after) is not int or stop_after<1): raise ValueError('stop_after must be positive')
     if not dataset['cases']: raise ValueError('cannot run an empty dataset')
+    config=bound_config(config,provider)
     identity=configs.run_identity(datasets.fingerprint(dataset),config,seed)
     store.register(identity,datasets.fingerprint(dataset),config,seed,len(dataset['cases']))
     owner=uuid.uuid4().hex
@@ -46,3 +47,12 @@ def run(dataset,config,provider,store,seed=0,stop_after=None,max_attempts=3,leas
         return identity
     except BaseException:
         store.finish(identity,owner,'failed');raise
+
+def bound_config(config,provider):
+    identity={'adapter':getattr(provider,'name',type(provider).__name__)}
+    if hasattr(provider,'outputs'): identity['outputs_hash']=datasets.digest(provider.outputs)
+    if hasattr(provider,'revision'): identity['model_revision']=provider.revision
+    return dict(config,provider_identity=identity)
+
+def run_key(dataset,config,provider,seed=0):
+    return configs.run_identity(datasets.fingerprint(dataset),bound_config(config,provider),seed)

@@ -9,6 +9,7 @@ class Contract(unittest.TestCase):
   d={'version':1,'name':'x','cases':[{'id':i,'task':'tool','input':'x','expected':{'tool':'ok'}} for i in ['a','b']]}
   c={'model':'fixture','prompt':'{input}'}
   with Store(':memory:') as s:
-   rid=run_identity(fingerprint(d),c);s.register(rid,fingerprint(d),c,0,2);s.save_result(rid,'a',{'score':1})
+   p=FixtureProvider({'b':'{"tool":"ok"}'})
+   bound=m.bound_config(c,p);rid=m.run_key(d,c,p);s.register(rid,fingerprint(d),bound,0,2);s.save_result(rid,'a',{'score':1})
    m.run(d,c,FixtureProvider({'b':'{"tool":"ok"}'}),s)
    self.assertEqual(len(s.results(rid)),2)
