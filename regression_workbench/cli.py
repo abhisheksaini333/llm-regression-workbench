@@ -15,6 +15,8 @@ def parser():
     v=commands.add_parser('validate');v.add_argument('dataset')
     r=commands.add_parser('run');r.add_argument('dataset');r.add_argument('--config',required=True);r.add_argument('--db',default='.local/runs.db');r.add_argument('--outputs');r.add_argument('--model-path');r.add_argument('--model-revision');r.add_argument('--seed',type=int,default=0);r.add_argument('--stop-after',type=int);r.add_argument('--max-attempts',type=int,default=3)
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate');c.add_argument('--db',default='.local/runs.db');c.add_argument('--policy');c.add_argument('--markdown')
+    b=commands.add_parser('backup');b.add_argument('destination');b.add_argument('--db',default='.local/runs.db')
+    l=commands.add_parser('list');l.add_argument('--db',default='.local/runs.db')
     return p
 
 def dispatch(args):
@@ -34,6 +36,11 @@ def dispatch(args):
         with Store(args.db) as store: result=comparison.compare_runs(store,args.baseline,args.candidate,policy)
         if args.markdown: Path(args.markdown).write_text(report.markdown(result))
         return result,0 if result['gate']['passed'] else 1
+    if args.command=='backup':
+        with Store(args.db) as store: store.backup(args.destination)
+        return {'backup':args.destination},0
+    if args.command=='list':
+        with Store(args.db) as store: return store.list_runs(),0
     raise ValueError('unknown command')
 
 def main(argv=None):
