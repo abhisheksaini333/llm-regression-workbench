@@ -1,0 +1,7 @@
+{
+  "model": "fixture-candidate",
+  "prompt": "{input}",
+  "parameters": {
+    "temperature": 0
+  }
+}

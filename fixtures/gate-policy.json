@@ -1,0 +1,14 @@
+{
+  "max_overall_regression": 0.02,
+  "critical": {
+    "critical": {
+      "minimum": 0.8,
+      "max_regression": 0.05,
+      "min_cases": 4
+    }
+  },
+  "budgets": {
+    "max_errors": 0,
+    "max_p95_ms": 5000
+  }
+}

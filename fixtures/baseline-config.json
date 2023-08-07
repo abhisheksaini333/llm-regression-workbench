@@ -1,0 +1,7 @@
+{
+  "model": "fixture-baseline",
+  "prompt": "{input}",
+  "parameters": {
+    "temperature": 0
+  }
+}

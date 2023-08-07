@@ -1,0 +1,442 @@
+{
+  "version": 1,
+  "name": "workbench-owned-task-suite",
+  "cases": [
+    {
+      "id": "extract-1",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Ada: total 25.",
+      "expected": {
+        "customer": "Ada",
+        "total": 25
+      },
+      "slices": [
+        "critical",
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-1",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=1.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-1",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The search service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "search",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-1",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 100. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "100"
+        }
+      },
+      "slices": [
+        "critical",
+        "tools"
+      ]
+    },
+    {
+      "id": "extract-2",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Ben: total 50.",
+      "expected": {
+        "customer": "Ben",
+        "total": 50
+      },
+      "slices": [
+        "critical",
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-2",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=2.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-2",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The payments service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "payments",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-2",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 101. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "101"
+        }
+      },
+      "slices": [
+        "critical",
+        "tools"
+      ]
+    },
+    {
+      "id": "extract-3",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Cora: total 75.",
+      "expected": {
+        "customer": "Cora",
+        "total": 75
+      },
+      "slices": [
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-3",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=3.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-3",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The catalog service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "catalog",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-3",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 102. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "102"
+        }
+      },
+      "slices": [
+        "tools"
+      ]
+    },
+    {
+      "id": "extract-4",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Dev: total 100.",
+      "expected": {
+        "customer": "Dev",
+        "total": 100
+      },
+      "slices": [
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-4",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=4.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-4",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The shipping service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "shipping",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-4",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 103. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "103"
+        }
+      },
+      "slices": [
+        "tools"
+      ]
+    },
+    {
+      "id": "extract-5",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Eve: total 125.",
+      "expected": {
+        "customer": "Eve",
+        "total": 125
+      },
+      "slices": [
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-5",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=5.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-5",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The accounts service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "accounts",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-5",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 104. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "104"
+        }
+      },
+      "slices": [
+        "tools"
+      ]
+    },
+    {
+      "id": "extract-6",
+      "task": "extraction",
+      "input": "Return a JSON object with customer and total. Invoice for Finn: total 150.",
+      "expected": {
+        "customer": "Finn",
+        "total": 150
+      },
+      "slices": [
+        "invoices"
+      ]
+    },
+    {
+      "id": "schema-6",
+      "task": "schema",
+      "input": "Return exactly a JSON object with status=\"ok\" and count=6.",
+      "expected": {
+        "required": [
+          "status",
+          "count"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "no"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "slices": [
+        "structured"
+      ]
+    },
+    {
+      "id": "summary-6",
+      "task": "summary",
+      "input": "Summarize in fewer than 20 words: The billing service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+      "expected": {
+        "keywords": [
+          "billing",
+          "recovered"
+        ],
+        "max_words": 20,
+        "forbidden": [
+          "guaranteed",
+          "permanent"
+        ]
+      },
+      "slices": [
+        "summaries"
+      ]
+    },
+    {
+      "id": "tool-6",
+      "task": "tool",
+      "input": "Available tool: lookup_order(id). Find order 105. Return JSON with tool and arguments.",
+      "expected": {
+        "tool": "lookup_order",
+        "arguments": {
+          "id": "105"
+        }
+      },
+      "slices": [
+        "tools"
+      ]
+    }
+  ]
+}
