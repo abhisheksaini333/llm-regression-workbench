@@ -64,8 +64,8 @@ class Store:
         # IMMEDIATE serializes ownership validation with immutable result insertion.
         self.connection.execute('BEGIN IMMEDIATE')
         try:
-            row=self.connection.execute('SELECT owner FROM runs WHERE id=?',(run_id,)).fetchone()
-            if not row or row['owner']!=owner: raise RuntimeError('worker lease lost')
+            row=self.connection.execute('SELECT owner,lease_until FROM runs WHERE id=?',(run_id,)).fetchone()
+            if not row or row['owner']!=owner or row['lease_until']<=time.time(): raise RuntimeError('worker lease lost')
             self.save_result(run_id,case_id,payload)
             self.connection.commit()
         except BaseException:
@@ -76,7 +76,7 @@ class Store:
         run=self.get_run(run_id)
         if status=='complete' and run['completed']!=run['expected_count']: raise ValueError('run incomplete')
         with self.connection:
-            cursor=self.connection.execute('UPDATE runs SET status=?,owner=NULL,lease_until=0 WHERE id=? AND owner=?',(status,run_id,owner))
+            cursor=self.connection.execute('UPDATE runs SET status=?,owner=NULL,lease_until=0 WHERE id=? AND owner=? AND lease_until>?',(status,run_id,owner,time.time()))
             if cursor.rowcount!=1: raise RuntimeError('worker lease lost')
 
     def backup(self,path):
