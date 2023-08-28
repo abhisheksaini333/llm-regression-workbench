@@ -18,7 +18,11 @@ def create_server(db,port=8765,policy=None,static_dir=None):
         def do_GET(self):
             try:
                 parsed=urlparse(self.path)
+                query=parse_qs(parsed.query)
                 with Store(db) as store:
+                    if parsed.path=='/api/compare':
+                        baseline=query.get('baseline',[''])[0];candidate=query.get('candidate',[''])[0]
+                        return self.send_json(200,compare_runs(store,baseline,candidate,policy))
                     if parsed.path=='/api/runs': return self.send_json(200,store.list_runs())
                     if parsed.path.startswith('/api/runs/'):
                         identity=unquote(parsed.path[len('/api/runs/'):])
