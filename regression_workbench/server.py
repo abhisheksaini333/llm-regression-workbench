@@ -20,6 +20,13 @@ def create_server(db,port=8765,policy=None,static_dir=None):
                 parsed=urlparse(self.path)
                 query=parse_qs(parsed.query)
                 with Store(db) as store:
+                    if parsed.path=='/api/review':
+                        baseline=query.get('baseline',[''])[0];candidate=query.get('candidate',[''])[0];reviewer=query.get('reviewer',[''])[0]
+                        if not reviewer.strip(): raise ValueError('reviewer required')
+                        comparison=compare_runs(store,baseline,candidate,policy)
+                        labels=[r for r in review.list_reviews(store,baseline,candidate) if r['reviewer']==reviewer]
+                        by_case={r['case_id']:r for r in labels}
+                        return self.send_json(200,{'pairs':[dict(review.blind_pair(p,reviewer),revision=by_case.get(p['case_id'],{}).get('revision',0),reviewed=p['case_id'] in by_case) for p in comparison['cases']]})
                     if parsed.path=='/api/compare':
                         baseline=query.get('baseline',[''])[0];candidate=query.get('candidate',[''])[0]
                         return self.send_json(200,compare_runs(store,baseline,candidate,policy))
