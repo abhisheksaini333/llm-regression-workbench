@@ -15,6 +15,18 @@ def create_server(db,port=8765,policy=None,static_dir=None):
         def send_json(self,status,value):
             body=json.dumps(sanitize(value),allow_nan=False).encode()
             self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.end_headers();self.wfile.write(body)
+        def do_POST(self):
+            try:
+                if urlparse(self.path).path!='/api/reviews': return self.send_json(404,{'error':'not found'})
+                size=int(self.headers.get('Content-Length','0'))
+                if not 0<size<=16384: return self.send_json(413,{'error':'request body must be 1..16384 bytes'})
+                data=json.loads(self.rfile.read(size))
+                with Store(db) as store:
+                    compare_runs(store,data['baseline'],data['candidate'],policy)
+                    preference=review.unblind(data['case_id'],data['reviewer'],data['choice'])
+                    label=review.save(store,data['baseline'],data['candidate'],data['case_id'],data['reviewer'],preference,data.get('note',''),data.get('revision'))
+                    return self.send_json(200,{'saved':True,'revision':label['revision']})
+            except (ValueError,KeyError,TypeError) as error:self.send_json(400,{'error':str(error)})
         def do_GET(self):
             try:
                 parsed=urlparse(self.path)
