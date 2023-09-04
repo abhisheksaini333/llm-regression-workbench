@@ -35,6 +35,13 @@ def create_server(db,port=8765,policy=None,static_dir=None):
                 parsed=urlparse(self.path)
                 query=parse_qs(parsed.query)
                 with Store(db) as store:
+                    if parsed.path=='/api/review-analysis':
+                        baseline=query.get('baseline',[''])[0];candidate=query.get('candidate',[''])[0]
+                        compared=compare_runs(store,baseline,candidate,policy);labels=review.list_reviews(store,baseline,candidate)
+                        analysis=review.agreement(compared['cases'],labels)
+                        analysis['reviewers']=review.reviewer_consistency(labels)
+                        if len([r for r in labels if r['preference']!='skip'])>=2: analysis['calibration']=review.calibrate(compared['cases'],labels)
+                        return self.send_json(200,analysis)
                     if parsed.path=='/api/review':
                         baseline=query.get('baseline',[''])[0];candidate=query.get('candidate',[''])[0];reviewer=query.get('reviewer',[''])[0]
                         if not reviewer.strip(): raise ValueError('reviewer required')
