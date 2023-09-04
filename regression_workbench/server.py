@@ -56,6 +56,14 @@ def create_server(db,port=8765,policy=None,static_dir=None):
                     if parsed.path.startswith('/api/runs/'):
                         identity=unquote(parsed.path[len('/api/runs/'):])
                         return self.send_json(200,dict(store.get_run(identity),results=store.results(identity)))
+                if not parsed.path.startswith('/api/') and static_dir:
+                    root=Path(static_dir).resolve()
+                    requested=(root/unquote(parsed.path).lstrip('/')).resolve()
+                    if not requested.is_relative_to(root): return self.send_json(403,{'error':'invalid path'})
+                    target=requested if requested.is_file() else root/'index.html'
+                    if target.is_file():
+                        import mimetypes
+                        body=target.read_bytes();self.send_response(200);self.send_header('Content-Type',mimetypes.guess_type(str(target))[0] or 'application/octet-stream');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body);return
                 self.send_json(404,{'error':'not found'})
             except KeyError:self.send_json(404,{'error':'run not found'})
             except ValueError as error:self.send_json(400,{'error':str(error)})
