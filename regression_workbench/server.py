@@ -16,6 +16,9 @@ def create_server(db,port=8765,policy=None,static_dir=None):
             body=json.dumps(sanitize(value),allow_nan=False).encode()
             self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.end_headers();self.wfile.write(body)
         def do_POST(self):
+            allowed={'http://127.0.0.1:'+str(self.server.server_port),'http://localhost:'+str(self.server.server_port)}
+            if self.headers.get('Origin') not in allowed: return self.send_json(403,{'error':'same-origin review required'})
+            if self.headers.get_content_type()!='application/json': return self.send_json(415,{'error':'JSON content type required'})
             try:
                 if urlparse(self.path).path!='/api/reviews': return self.send_json(404,{'error':'not found'})
                 size=int(self.headers.get('Content-Length','0'))
