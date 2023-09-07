@@ -17,6 +17,7 @@ def parser():
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate');c.add_argument('--db',default='.local/runs.db');c.add_argument('--policy');c.add_argument('--markdown')
     b=commands.add_parser('backup');b.add_argument('destination');b.add_argument('--db',default='.local/runs.db')
     l=commands.add_parser('list');l.add_argument('--db',default='.local/runs.db')
+    s=commands.add_parser('serve');s.add_argument('--db',default='.local/runs.db');s.add_argument('--port',type=int,default=8765);s.add_argument('--policy');s.add_argument('--static',default='frontend/dist')
     return p
 
 def dispatch(args):
@@ -41,6 +42,17 @@ def dispatch(args):
         return {'backup':args.destination},0
     if args.command=='list':
         with Store(args.db) as store: return store.list_runs(),0
+    if args.command=='serve':
+        from .server import create_server
+        policy=json.loads(Path(args.policy).read_text()) if args.policy else {}
+        Path(args.db).parent.mkdir(parents=True,exist_ok=True)
+        with Store(args.db):pass
+        server=create_server(args.db,args.port,policy,args.static)
+        print('Workbench: http://127.0.0.1:'+str(server.server_port),file=sys.stderr,flush=True)
+        try:server.serve_forever()
+        except KeyboardInterrupt:pass
+        finally:server.server_close()
+        return {'stopped':True},0
     raise ValueError('unknown command')
 
 def main(argv=None):
