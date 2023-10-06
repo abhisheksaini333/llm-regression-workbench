@@ -92,3 +92,21 @@ def compare_runs(store,baseline_id,candidate_id,policy=None):
     extra=operational_gate(operations['candidate'],policy.get('budgets',{'max_errors':0}))
     decision['failures'].extend(extra['failures']);decision['passed']=not decision['failures']
     return dict(comparison,baseline_id=baseline_id,candidate_id=candidate_id,operations=operations,gate=decision,policy=policy)
+
+def validate_policy(policy):
+    if not isinstance(policy,dict): raise ValueError('policy must be an object')
+    def number(value,lower,upper):
+        if type(value) not in (int,float) or not math.isfinite(value) or not lower<=value<=upper: raise ValueError('invalid policy threshold')
+    number(policy.get('max_overall_regression',0.02),0,1)
+    critical=policy.get('critical',{})
+    if not isinstance(critical,dict): raise ValueError('critical policy must be an object')
+    for name,rule in critical.items():
+        if not isinstance(name,str) or not name or not isinstance(rule,dict): raise ValueError('invalid critical slice policy')
+        for key in ('minimum','max_regression'):
+            if key in rule:number(rule[key],0,1)
+        if 'lower_delta_bound' in rule:number(rule['lower_delta_bound'],-1,1)
+        if 'min_cases' in rule and (type(rule['min_cases']) is not int or rule['min_cases']<1): raise ValueError('min_cases must be positive')
+    budgets=policy.get('budgets',{})
+    if not isinstance(budgets,dict): raise ValueError('budgets must be an object')
+    for value in budgets.values():number(value,0,1e12)
+    return policy
