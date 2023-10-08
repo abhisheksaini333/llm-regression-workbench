@@ -86,7 +86,7 @@ def compare_runs(store,baseline_id,candidate_id,policy=None):
     if baseline['status']!='complete' or candidate['status']!='complete': raise ValueError('both runs must be complete')
     a=store.results(baseline_id);b=store.results(candidate_id)
     comparison=compare(a,b)
-    policy=policy or {}
+    policy=validate_policy(policy or {})
     decision=gate(comparison,policy.get('critical',{}),policy.get('max_overall_regression',0.02))
     operations={'baseline':operational(a),'candidate':operational(b)}
     extra=operational_gate(operations['candidate'],policy.get('budgets',{'max_errors':0}))
