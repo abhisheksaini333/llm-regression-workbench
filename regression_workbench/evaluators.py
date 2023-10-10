@@ -9,7 +9,7 @@ def result(score, reason, details=None):
 
 def parse_object(output):
     try:
-        value=json.loads(output)
+        value=json.loads(output,parse_constant=lambda value:(_ for _ in ()).throw(ValueError('nonfinite JSON')))
         return value if isinstance(value,dict) else None
     except (ValueError,TypeError): return None
 
