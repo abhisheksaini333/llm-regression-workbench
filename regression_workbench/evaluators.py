@@ -16,7 +16,7 @@ def parse_object(output):
 def extraction(output, expected):
     value=parse_object(output)
     if value is None: return result(0,'invalid JSON object')
-    matches={key:key in value and value[key]==item for key,item in expected.items()}
+    matches={key:key in value and value[key]==item and (type(value[key]) is type(item) if type(value[key]) is bool or type(item) is bool else True) for key,item in expected.items()}
     return result(sum(matches.values())/len(matches) if matches else 1,'field accuracy',{'fields':matches})
 
 def schema(output, expected):
