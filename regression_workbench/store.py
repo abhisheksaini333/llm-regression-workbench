@@ -8,6 +8,7 @@ from .redaction import sanitize
 class Store:
     def __init__(self,path,secrets=()):
         self.secrets=tuple(secrets)
+        self.path=str(path)
         self.connection=sqlite3.connect(str(path),timeout=10)
         self.connection.row_factory=sqlite3.Row
         self.connection.execute('PRAGMA journal_mode=WAL')
@@ -80,6 +81,8 @@ class Store:
             if cursor.rowcount!=1: raise RuntimeError('worker lease lost')
 
     def backup(self,path):
+        from pathlib import Path
+        if self.path!=':memory:' and Path(path).resolve()==Path(self.path).resolve(): raise ValueError('backup destination must differ from source')
         target=sqlite3.connect(str(path))
         try: self.connection.backup(target)
         finally: target.close()
