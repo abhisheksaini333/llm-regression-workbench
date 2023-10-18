@@ -15,6 +15,8 @@ def save(store,baseline,candidate,case_id,reviewer,preference,note='',expected_r
     if not isinstance(reviewer,str) or not reviewer.strip() or len(reviewer)>100: raise ValueError('reviewer required')
     if not isinstance(note,str) or len(note)>4000: raise ValueError('note too long')
     with store.connection:
+        for run_id in (baseline,candidate):
+            if not store.connection.execute('SELECT 1 FROM results WHERE run_id=? AND case_id=?',(run_id,case_id)).fetchone(): raise ValueError('review case does not exist in both runs')
         current=store.connection.execute('SELECT revision FROM reviews WHERE baseline=? AND candidate=? AND case_id=? AND reviewer=?',(baseline,candidate,case_id,reviewer)).fetchone()
         if expected_revision is not None and expected_revision!=(current['revision'] if current else 0): raise ValueError('review revision conflict')
         store.connection.execute('INSERT INTO reviews VALUES (?,?,?,?,?,?,1,?) ON CONFLICT(baseline,candidate,case_id,reviewer) DO UPDATE SET preference=excluded.preference,note=excluded.note,revision=reviews.revision+1,updated=excluded.updated',(baseline,candidate,case_id,reviewer,preference,sanitize(note,store.secrets),time.time()))
