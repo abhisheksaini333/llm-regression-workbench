@@ -12,10 +12,18 @@ from . import review
 def create_server(db,port=8765,policy=None,static_dir=None):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args): pass
+        def allowed_host(self):
+            return self.headers.get('Host') in {'127.0.0.1:'+str(self.server.server_port),'localhost:'+str(self.server.server_port)}
+        def end_headers(self):
+            self.send_header('X-Content-Type-Options','nosniff')
+            self.send_header('Referrer-Policy','no-referrer')
+            self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'")
+            super().end_headers()
         def send_json(self,status,value):
             body=json.dumps(sanitize(value),allow_nan=False).encode()
             self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.end_headers();self.wfile.write(body)
         def do_POST(self):
+            if not self.allowed_host(): return self.send_json(403,{'error':'local Host required'})
             allowed={'http://127.0.0.1:'+str(self.server.server_port),'http://localhost:'+str(self.server.server_port)}
             if self.headers.get('Origin') not in allowed: return self.send_json(403,{'error':'same-origin review required'})
             if self.headers.get_content_type()!='application/json': return self.send_json(415,{'error':'JSON content type required'})
@@ -31,6 +39,7 @@ def create_server(db,port=8765,policy=None,static_dir=None):
                     return self.send_json(200,{'saved':True,'revision':label['revision']})
             except (ValueError,KeyError,TypeError) as error:self.send_json(400,{'error':str(error)})
         def do_GET(self):
+            if not self.allowed_host(): return self.send_json(403,{'error':'local Host required'})
             try:
                 parsed=urlparse(self.path)
                 query=parse_qs(parsed.query)
