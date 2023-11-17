@@ -17,7 +17,7 @@ def parser():
     c=commands.add_parser('compare');c.add_argument('baseline');c.add_argument('candidate');c.add_argument('--db',default='.local/runs.db');c.add_argument('--policy');c.add_argument('--markdown')
     b=commands.add_parser('backup');b.add_argument('destination');b.add_argument('--db',default='.local/runs.db')
     l=commands.add_parser('list');l.add_argument('--db',default='.local/runs.db')
-    s=commands.add_parser('serve');s.add_argument('--db',default='.local/runs.db');s.add_argument('--port',type=int,default=8765);s.add_argument('--policy');s.add_argument('--static',default='frontend/dist')
+    s=commands.add_parser('serve');s.add_argument('--db',default='.local/runs.db');s.add_argument('--port',type=int,default=8765);s.add_argument('--policy');s.add_argument('--static',default='frontend/dist');s.add_argument('--host',default='127.0.0.1',choices=['127.0.0.1','0.0.0.0'])
     return p
 
 def dispatch(args):
@@ -47,7 +47,7 @@ def dispatch(args):
         policy=json.loads(Path(args.policy).read_text()) if args.policy else {}
         Path(args.db).parent.mkdir(parents=True,exist_ok=True)
         with Store(args.db):pass
-        server=create_server(args.db,args.port,policy,args.static)
+        server=create_server(args.db,args.port,policy,args.static,args.host)
         print('Workbench: http://127.0.0.1:'+str(server.server_port),file=sys.stderr,flush=True)
         try:server.serve_forever()
         except KeyboardInterrupt:pass

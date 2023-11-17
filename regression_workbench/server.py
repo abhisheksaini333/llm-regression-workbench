@@ -9,7 +9,8 @@ from .comparison import compare_runs
 from .redaction import sanitize
 from . import review
 
-def create_server(db,port=8765,policy=None,static_dir=None):
+def create_server(db,port=8765,policy=None,static_dir=None,host="127.0.0.1"):
+    if host not in {"127.0.0.1","0.0.0.0"}: raise ValueError("unsupported bind host")
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args): pass
         def allowed_host(self):
@@ -76,4 +77,4 @@ def create_server(db,port=8765,policy=None,static_dir=None):
                 self.send_json(404,{'error':'not found'})
             except KeyError:self.send_json(404,{'error':'run not found'})
             except ValueError as error:self.send_json(400,{'error':str(error)})
-    return ThreadingHTTPServer(('127.0.0.1',port),Handler)
+    return ThreadingHTTPServer((host,port),Handler)
