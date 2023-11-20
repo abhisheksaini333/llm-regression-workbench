@@ -1,0 +1,1501 @@
+{
+  "model": "google/flan-t5-small",
+  "revision": "371f99f1df1429771f01227c93bd662f5eec2480",
+  "runtime": {
+    "python": "3.10.21",
+    "torch": "1.13.1",
+    "transformers": "4.25.1",
+    "machine": "arm64",
+    "threads": 2
+  },
+  "dataset": "workbench-owned-task-suite",
+  "case_count": 24,
+  "run_ids": [
+    "3b85c1f3bef7267c3480bdbb7cf0d6840d34ea1a6da1f84edbfe414c1743004f",
+    "caa3ec1864fbaef8ac62b5a2ec142fd57d787d3303a908d672627e68e107b326",
+    "f1b06a2be784a1e047ffb1724a6bc130cdf00c0e811c2e50797daf37efee0a24"
+  ],
+  "wall_seconds": 7.916334958048537,
+  "repeat_outputs_identical": true,
+  "comparison": {
+    "overall": {
+      "count": 24,
+      "baseline": 0.0625,
+      "candidate": 0.041666666666666664,
+      "delta": -0.020833333333333332,
+      "interval": {
+        "mean": -0.020833333333333332,
+        "low": -0.0625,
+        "high": 0.0,
+        "confidence": 0.95,
+        "resamples": 2000,
+        "seed": 0,
+        "n": 24
+      }
+    },
+    "tasks": {
+      "extraction": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "schema": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "summary": {
+        "count": 6,
+        "baseline": 0.25,
+        "candidate": 0.16666666666666666,
+        "delta": -0.08333333333333333,
+        "interval": {
+          "mean": -0.08333333333333333,
+          "low": -0.25,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "tool": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      }
+    },
+    "slices": {
+      "critical": {
+        "count": 4,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 4
+        }
+      },
+      "invoices": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "structured": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "summaries": {
+        "count": 6,
+        "baseline": 0.25,
+        "candidate": 0.16666666666666666,
+        "delta": -0.08333333333333333,
+        "interval": {
+          "mean": -0.08333333333333333,
+          "low": -0.25,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      },
+      "tools": {
+        "count": 6,
+        "baseline": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0,
+        "interval": {
+          "mean": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "confidence": 0.95,
+          "resamples": 2000,
+          "seed": 0,
+          "n": 6
+        }
+      }
+    },
+    "cases": [
+      {
+        "case_id": "extract-1",
+        "baseline": {
+          "details": {},
+          "input_tokens": 21,
+          "latency_ms": 57.94445890933275,
+          "output": "Ada",
+          "output_tokens": 3,
+          "prompt": "Return a JSON object with customer and total. Invoice for Ada: total 25.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-1"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 32,
+          "latency_ms": 26.158542139455676,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Ada: total 25.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-1"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "extract-2",
+        "baseline": {
+          "details": {},
+          "input_tokens": 20,
+          "latency_ms": 24.041665950790048,
+          "output": "Ben",
+          "output_tokens": 2,
+          "prompt": "Return a JSON object with customer and total. Invoice for Ben: total 50.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-2"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 31,
+          "latency_ms": 32.977249938994646,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Ben: total 50.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-2"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "extract-3",
+        "baseline": {
+          "details": {},
+          "input_tokens": 21,
+          "latency_ms": 24.60066694766283,
+          "output": "Cora",
+          "output_tokens": 3,
+          "prompt": "Return a JSON object with customer and total. Invoice for Cora: total 75.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-3"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 32,
+          "latency_ms": 37.65491605736315,
+          "output": "Cora",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Cora: total 75.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-3"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "extract-4",
+        "baseline": {
+          "details": {},
+          "input_tokens": 21,
+          "latency_ms": 36.034541903063655,
+          "output": "a total of 100",
+          "output_tokens": 6,
+          "prompt": "Return a JSON object with customer and total. Invoice for Dev: total 100.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-4"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 32,
+          "latency_ms": 29.039458138868213,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Dev: total 100.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-4"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "extract-5",
+        "baseline": {
+          "details": {},
+          "input_tokens": 21,
+          "latency_ms": 21.196500165387988,
+          "output": "125",
+          "output_tokens": 3,
+          "prompt": "Return a JSON object with customer and total. Invoice for Eve: total 125.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-5"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 32,
+          "latency_ms": 28.34358299151063,
+          "output": "125",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Eve: total 125.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-5"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "extract-6",
+        "baseline": {
+          "details": {},
+          "input_tokens": 20,
+          "latency_ms": 16.31183293648064,
+          "output": "Finn",
+          "output_tokens": 2,
+          "prompt": "Return a JSON object with customer and total. Invoice for Finn: total 150.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-6"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 31,
+          "latency_ms": 74.15033387951553,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return a JSON object with customer and total. Invoice for Finn: total 150.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "invoices"
+          ],
+          "status": "ok",
+          "task": "extraction",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "extract-6"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-1",
+        "baseline": {
+          "details": {},
+          "input_tokens": 17,
+          "latency_ms": 151.10066696070135,
+          "output": "if i == 'ok' and i == '1': return i + 1",
+          "output_tokens": 26,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=1.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-1"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 28,
+          "latency_ms": 31.896083848550916,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=1.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-1"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-2",
+        "baseline": {
+          "details": {},
+          "input_tokens": 17,
+          "latency_ms": 393.2389998808503,
+          "output": "if 'ok' in a JSON if 'count='2' in a JSON if 'ok' in a JSON if 'ok' in a JSON if 'count='2' in a JSON if ",
+          "output_tokens": 64,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=2.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-2"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 28,
+          "latency_ms": 30.137790832668543,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=2.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-2"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-3",
+        "baseline": {
+          "details": {},
+          "input_tokens": 17,
+          "latency_ms": 378.72795783914626,
+          "output": "a json = 0 for i in range(len(json)): if json[i] == 'ok': json.append(json[i]) else: json.append(json[i]",
+          "output_tokens": 64,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=3.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-3"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 28,
+          "latency_ms": 29.146709013730288,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=3.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-3"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-4",
+        "baseline": {
+          "details": {},
+          "input_tokens": 17,
+          "latency_ms": 385.2850841358304,
+          "output": "a tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple tuple t",
+          "output_tokens": 64,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=4.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-4"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 28,
+          "latency_ms": 27.06374996341765,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=4.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-4"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-5",
+        "baseline": {
+          "details": {},
+          "input_tokens": 17,
+          "latency_ms": 84.71645810641348,
+          "output": "a jSON id = 0",
+          "output_tokens": 12,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=5.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-5"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 28,
+          "latency_ms": 27.739667100831866,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=5.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-5"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "schema-6",
+        "baseline": {
+          "details": {},
+          "input_tokens": 18,
+          "latency_ms": 204.96149989776313,
+          "output": "if i == 'ok' and i == '1': return i + 1",
+          "output_tokens": 26,
+          "prompt": "Return exactly a JSON object with status=\"ok\" and count=6.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-6"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 29,
+          "latency_ms": 30.721624847501516,
+          "output": "0",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Return exactly a JSON object with status=\"ok\" and count=6.",
+          "reason": "invalid JSON object",
+          "score": 0.0,
+          "slices": [
+            "structured"
+          ],
+          "status": "ok",
+          "task": "schema",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "schema-6"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "summary-1",
+        "baseline": {
+          "details": {
+            "matched": [
+              "search"
+            ],
+            "violations": [],
+            "word_count": 9
+          },
+          "input_tokens": 35,
+          "latency_ms": 84.53970798291266,
+          "output": "A search service has been unavailable for a week.",
+          "output_tokens": 12,
+          "prompt": "Summarize in fewer than 20 words: The search service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.5,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-1"
+        },
+        "candidate": {
+          "details": {
+            "matched": [
+              "search"
+            ],
+            "violations": [],
+            "word_count": 10
+          },
+          "input_tokens": 46,
+          "latency_ms": 108.215541113168,
+          "output": "Searching for a search service was delayed for ten minutes.",
+          "output_tokens": 15,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The search service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.5,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-1"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "summary-2",
+        "baseline": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 9
+          },
+          "input_tokens": 35,
+          "latency_ms": 97.27237490005791,
+          "output": "A payment service has been unable to be reactivated.",
+          "output_tokens": 15,
+          "prompt": "Summarize in fewer than 20 words: The payments service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-2"
+        },
+        "candidate": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 7
+          },
+          "input_tokens": 46,
+          "latency_ms": 93.60912488773465,
+          "output": "The service was unavailable for ten minutes.",
+          "output_tokens": 10,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The payments service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-2"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "summary-3",
+        "baseline": {
+          "details": {
+            "matched": [
+              "catalog"
+            ],
+            "violations": [],
+            "word_count": 9
+          },
+          "input_tokens": 35,
+          "latency_ms": 78.62195814959705,
+          "output": "A catalog service has been unavailable for a week.",
+          "output_tokens": 12,
+          "prompt": "Summarize in fewer than 20 words: The catalog service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.5,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-3"
+        },
+        "candidate": {
+          "details": {
+            "matched": [
+              "catalog"
+            ],
+            "violations": [],
+            "word_count": 8
+          },
+          "input_tokens": 46,
+          "latency_ms": 124.63083304464817,
+          "output": "The catalog service was unavailable for ten minutes.",
+          "output_tokens": 11,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The catalog service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.5,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-3"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "summary-4",
+        "baseline": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 12
+          },
+          "input_tokens": 35,
+          "latency_ms": 111.45325005054474,
+          "output": "A shipper has been unable to use the service for a week.",
+          "output_tokens": 17,
+          "prompt": "Summarize in fewer than 20 words: The shipping service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-4"
+        },
+        "candidate": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 7
+          },
+          "input_tokens": 46,
+          "latency_ms": 244.46537485346198,
+          "output": "The service was unavailable for ten minutes.",
+          "output_tokens": 10,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The shipping service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-4"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "summary-5",
+        "baseline": {
+          "details": {
+            "matched": [
+              "accounts"
+            ],
+            "violations": [],
+            "word_count": 14
+          },
+          "input_tokens": 35,
+          "latency_ms": 203.04412487894297,
+          "output": "A spokesman for the company said it was unable to access the accounts service.",
+          "output_tokens": 19,
+          "prompt": "Summarize in fewer than 20 words: The accounts service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.5,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-5"
+        },
+        "candidate": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 8
+          },
+          "input_tokens": 46,
+          "latency_ms": 113.86383417993784,
+          "output": "The account service was unavailable for ten minutes.",
+          "output_tokens": 11,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The accounts service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-5"
+        },
+        "delta": -0.5
+      },
+      {
+        "case_id": "summary-6",
+        "baseline": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 16
+          },
+          "input_tokens": 35,
+          "latency_ms": 234.1086668893695,
+          "output": "A spokesman for the company said it was unable to provide a service for the company.",
+          "output_tokens": 22,
+          "prompt": "Summarize in fewer than 20 words: The billing service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-6"
+        },
+        "candidate": {
+          "details": {
+            "matched": [],
+            "violations": [],
+            "word_count": 7
+          },
+          "input_tokens": 46,
+          "latency_ms": 84.81558412313461,
+          "output": "The service was unavailable for ten minutes.",
+          "output_tokens": 10,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Summarize in fewer than 20 words: The billing service was unavailable for ten minutes. Engineers restarted the service. It recovered and monitoring continues.",
+          "reason": "keyword coverage",
+          "score": 0.0,
+          "slices": [
+            "summaries"
+          ],
+          "status": "ok",
+          "task": "summary",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "summary-6"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-1",
+        "baseline": {
+          "details": {},
+          "input_tokens": 24,
+          "latency_ms": 137.60037487372756,
+          "output": "lookup_order(id)",
+          "output_tokens": 9,
+          "prompt": "Available tool: lookup_order(id). Find order 100. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-1"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 35,
+          "latency_ms": 70.51858399063349,
+          "output": "lookup_order(id)",
+          "output_tokens": 9,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 100. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-1"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-2",
+        "baseline": {
+          "details": {},
+          "input_tokens": 24,
+          "latency_ms": 66.92350003868341,
+          "output": "lookup_order(id)",
+          "output_tokens": 9,
+          "prompt": "Available tool: lookup_order(id). Find order 101. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-2"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 35,
+          "latency_ms": 96.49383299984038,
+          "output": "lookup_order(id)",
+          "output_tokens": 9,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 101. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "critical",
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-2"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-3",
+        "baseline": {
+          "details": {},
+          "input_tokens": 25,
+          "latency_ms": 26.142416056245565,
+          "output": "102",
+          "output_tokens": 3,
+          "prompt": "Available tool: lookup_order(id). Find order 102. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-3"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 36,
+          "latency_ms": 45.15224997885525,
+          "output": "102",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 102. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-3"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-4",
+        "baseline": {
+          "details": {},
+          "input_tokens": 25,
+          "latency_ms": 27.322083013132215,
+          "output": "103",
+          "output_tokens": 3,
+          "prompt": "Available tool: lookup_order(id). Find order 103. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-4"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 36,
+          "latency_ms": 33.531625056639314,
+          "output": "103",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 103. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-4"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-5",
+        "baseline": {
+          "details": {},
+          "input_tokens": 25,
+          "latency_ms": 25.050124851986766,
+          "output": "104",
+          "output_tokens": 3,
+          "prompt": "Available tool: lookup_order(id). Find order 104. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-5"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 36,
+          "latency_ms": 40.8165839035064,
+          "output": "104",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 104. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-5"
+        },
+        "delta": 0.0
+      },
+      {
+        "case_id": "tool-6",
+        "baseline": {
+          "details": {},
+          "input_tokens": 25,
+          "latency_ms": 26.365041034296155,
+          "output": "105",
+          "output_tokens": 3,
+          "prompt": "Available tool: lookup_order(id). Find order 105. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-6"
+        },
+        "candidate": {
+          "details": {},
+          "input_tokens": 36,
+          "latency_ms": 47.39295784384012,
+          "output": "105",
+          "output_tokens": 3,
+          "prompt": "Follow the instruction carefully. Give only the requested answer. Available tool: lookup_order(id). Find order 105. Return JSON with tool and arguments.",
+          "reason": "invalid tool JSON",
+          "score": 0.0,
+          "slices": [
+            "tools"
+          ],
+          "status": "ok",
+          "task": "tool",
+          "trace": {
+            "deterministic": true,
+            "provider": "transformers",
+            "revision": "371f99f1df1429771f01227c93bd662f5eec2480"
+          },
+          "usage_kind": "tokens",
+          "version": 1,
+          "case_id": "tool-6"
+        },
+        "delta": 0.0
+      }
+    ],
+    "baseline_id": "3b85c1f3bef7267c3480bdbb7cf0d6840d34ea1a6da1f84edbfe414c1743004f",
+    "candidate_id": "f1b06a2be784a1e047ffb1724a6bc130cdf00c0e811c2e50797daf37efee0a24",
+    "operations": {
+      "baseline": {
+        "count": 24,
+        "p50_ms": 78.62195814959705,
+        "p95_ms": 385.2850841358304,
+        "total_tokens": 987,
+        "usage_kinds": [
+          "tokens"
+        ],
+        "errors": 0
+      },
+      "candidate": {
+        "count": 24,
+        "p50_ms": 37.65491605736315,
+        "p95_ms": 124.63083304464817,
+        "total_tokens": 982,
+        "usage_kinds": [
+          "tokens"
+        ],
+        "errors": 0
+      }
+    },
+    "gate": {
+      "passed": false,
+      "failures": [
+        {
+          "scope": "overall",
+          "reason": "quality regression",
+          "observed": -0.020833333333333332,
+          "threshold": -0.02
+        },
+        {
+          "scope": "slice",
+          "slice": "critical",
+          "reason": "below minimum quality",
+          "observed": 0.0,
+          "threshold": 0.8
+        }
+      ]
+    },
+    "policy": {
+      "max_overall_regression": 0.02,
+      "critical": {
+        "critical": {
+          "minimum": 0.8,
+          "max_regression": 0.05,
+          "min_cases": 4
+        }
+      },
+      "budgets": {
+        "max_errors": 0,
+        "max_p95_ms": 5000
+      }
+    }
+  },
+  "evidence_scope": "Actual local CPU model generations on owned fixtures; no production traffic or human participant study."
+}
