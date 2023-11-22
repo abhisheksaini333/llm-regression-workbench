@@ -10,3 +10,5 @@ build/
 dist/
 .local/
 .env
+frontend/test-results/
+frontend/playwright-report/
