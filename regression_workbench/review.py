@@ -32,6 +32,7 @@ def save(
     if not isinstance(note, str) or len(note) > 4000:
         raise ValueError("note too long")
     with store.connection:
+        store.connection.execute("BEGIN IMMEDIATE")
         for run_id in (baseline, candidate):
             if not store.connection.execute(
                 "SELECT 1 FROM results WHERE run_id=? AND case_id=?", (run_id, case_id)
