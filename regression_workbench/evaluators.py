@@ -1,5 +1,4 @@
 """Evaluators contracts."""
-
 import json
 import math
 import re
@@ -48,18 +47,11 @@ def schema(output, expected):
     if value is None:
         return result(0, "invalid JSON object")
     missing = [key for key in expected.get("required", []) if key not in value]
-    return result(
+    checked = result(
         not missing,
         "schema requirements",
         {"errors": ["missing " + key for key in missing]},
     )
-
-
-_schema_required = schema
-
-
-def schema(output, expected):
-    checked = _schema_required(output, expected)
     value = parse_object(output)
     if value is None:
         return checked
@@ -79,45 +71,33 @@ def schema(output, expected):
                 raise ValueError("unsupported schema type")
             if not types[spec["type"]](value[key]):
                 errors.append("wrong type " + key)
-    return result(not errors, "schema validation", {"errors": errors})
-
-
-_schema_types = schema
-
-
-def schema(output, expected):
-    checked = _schema_types(output, expected)
+    checked = result(not errors, "schema validation", {"errors": errors})
     value = parse_object(output)
     if value is None:
         return checked
     errors = list(checked["details"]["errors"])
     for key, spec in expected.get("properties", {}).items():
-        if key in value and "enum" in spec and value[key] not in spec["enum"]:
+        if key in value and "enum" in spec and (value[key] not in spec["enum"]):
             errors.append("invalid enum " + key)
     if expected.get("additionalProperties") is False:
         errors.extend(
-            "unexpected " + key
-            for key in value.keys() - expected.get("properties", {}).keys()
+            (
+                "unexpected " + key
+                for key in value.keys() - expected.get("properties", {}).keys()
+            )
         )
     return result(not errors, "schema validation", {"errors": errors})
 
 
 def summary(output, expected):
-    words = set(re.findall(r"[\w'-]+", output.casefold()))
+    words = set(re.findall("[\\w'-]+", output.casefold()))
     keywords = expected.get("keywords", [])
     matched = [word for word in keywords if word.casefold() in words]
-    return result(
+    checked = result(
         len(matched) / len(keywords) if keywords else 1,
         "keyword coverage",
         {"matched": matched, "word_count": len(output.split())},
     )
-
-
-_summary_coverage = summary
-
-
-def summary(output, expected):
-    checked = _summary_coverage(output, expected)
     violations = []
     if len(output.split()) > expected.get("max_words", 100000):
         violations.append("length limit")
@@ -136,20 +116,13 @@ def tool(output, expected):
     if value is None:
         return result(0, "invalid tool JSON")
     correct = value.get("tool") == expected.get("tool")
-    return result(correct, "tool selection", {"name_correct": correct})
-
-
-_tool_name = tool
-
-
-def tool(output, expected):
-    checked = _tool_name(output, expected)
+    checked = result(correct, "tool selection", {"name_correct": correct})
     value = parse_object(output)
     if not checked["score"]:
         return checked
     args = value.get("arguments", {})
     correct = isinstance(args, dict) and all(
-        k in args and args[k] == v for k, v in expected.get("arguments", {}).items()
+        (k in args and args[k] == v for k, v in expected.get("arguments", {}).items())
     )
     return result(
         correct, "tool arguments", dict(checked["details"], arguments_correct=correct)
