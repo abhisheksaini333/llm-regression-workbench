@@ -68,6 +68,8 @@ class TransformersProvider:
         self.model.eval()
 
     def generate(self, prompt, case, config):
+        if config.get("parameters", {}).get("temperature", 0) != 0:
+            raise ValueError("local adapter supports deterministic temperature=0 only")
         maximum = config.get("parameters", {}).get("max_new_tokens", 64)
         if type(maximum) is not int or not 1 <= maximum <= 256:
             raise ValueError("max_new_tokens must be 1..256")
