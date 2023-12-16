@@ -1,0 +1,32 @@
+name: Verify workbench
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3.2.0
+      - uses: actions/setup-python@v4.4.0
+        with:
+          python-version: '3.10.9'
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: '16.16.0'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: python -m unittest discover -s tests
+      - run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - run: npm test && npm run build
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Exercise real browser comparison and review
+        run: |
+          python scripts/demo.py
+          python -m regression_workbench.cli serve --policy fixtures/gate-policy.json > /tmp/workbench-server.log 2>&1 &
+          WORKBENCH_PID=$!
+          trap 'kill "$WORKBENCH_PID"' EXIT
+          python -c "import urllib.request,time; time.sleep(1); urllib.request.urlopen('http://127.0.0.1:8765/api/runs')"
+          npm --prefix frontend run test:e2e
