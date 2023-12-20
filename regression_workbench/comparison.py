@@ -232,7 +232,7 @@ def compare_runs(store, baseline_id, candidate_id, policy=None):
 def validate_policy(policy):
     if not isinstance(policy, dict):
         raise ValueError("policy must be an object")
-    if set(policy)-{"critical", "budgets", "max_overall_regression"}:
+    if set(policy) - {"critical", "budgets", "max_overall_regression"}:
         raise ValueError("unknown policy field")
 
     def number(value, lower, upper):
@@ -250,7 +250,7 @@ def validate_policy(policy):
     for name, rule in critical.items():
         if not isinstance(name, str) or not name or (not isinstance(rule, dict)):
             raise ValueError("invalid critical slice policy")
-        if set(rule)-{"minimum", "max_regression", "min_cases", "lower_delta_bound"}:
+        if set(rule) - {"minimum", "max_regression", "min_cases", "lower_delta_bound"}:
             raise ValueError("unknown critical rule field")
         for key in ("minimum", "max_regression"):
             if key in rule:
@@ -264,7 +264,7 @@ def validate_policy(policy):
     budgets = policy.get("budgets", {})
     if not isinstance(budgets, dict):
         raise ValueError("budgets must be an object")
-    if set(budgets)-{"max_p95_ms", "max_tokens", "max_errors"}:
+    if set(budgets) - {"max_p95_ms", "max_tokens", "max_errors"}:
         raise ValueError("unknown budget field")
     for value in budgets.values():
         number(value, 0, 1000000000000.0)

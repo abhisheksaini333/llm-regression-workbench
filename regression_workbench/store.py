@@ -168,3 +168,18 @@ class Store:
             self.connection.backup(target)
         finally:
             target.close()
+
+    def record_owned_attempt(self, run_id, case_id, payload, owner):
+        """Fence durable retry accounting with the same lease as result writes."""
+        self.connection.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.connection.execute(
+                "SELECT owner,lease_until FROM runs WHERE id=?", (run_id,)
+            ).fetchone()
+            if not row or row["owner"] != owner or row["lease_until"] <= time.time():
+                raise RuntimeError("worker lease lost")
+            self.record_attempt(run_id, case_id, payload)
+            self.connection.commit()
+        except BaseException:
+            self.connection.rollback()
+            raise

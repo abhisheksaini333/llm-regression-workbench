@@ -68,10 +68,11 @@ def run(
                     break
                 except RetryableError as error:
                     failure = str(error)
-                    store.record_attempt(
+                    store.record_owned_attempt(
                         identity,
                         case["id"],
                         {"attempt": attempt, "error": failure, "retryable": True},
+                        owner,
                     )
                     if attempt < max_attempts:
                         sleep(min(0.05 * 2 ** (attempt - 1), 1.0))
