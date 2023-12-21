@@ -96,6 +96,7 @@ class Store:
         ]
 
     def record_attempt(self, run_id, case_id, payload):
+        """Trusted fixture/import helper; workers use record_owned_attempt instead."""
         with self.connection:
             self.connection.execute(
                 "INSERT INTO attempts(run_id,case_id,payload) VALUES (?,?,?)",
