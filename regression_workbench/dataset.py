@@ -19,7 +19,7 @@ def digest(value):
 
 
 def validate(dataset):
-    if not isinstance(dataset, dict) or dataset.get("version") != 1:
+    if not isinstance(dataset, dict) or type(dataset.get("version")) is not int or dataset["version"] != 1:
         raise ValueError("dataset.version must be 1")
     if not isinstance(dataset.get("name"), str) or not dataset["name"].strip():
         raise ValueError("dataset.name is required")
@@ -49,6 +49,7 @@ def validate(dataset):
             or len(slices) != len(set(slices))
         ):
             raise ValueError("slices must be unique nonempty strings")
+    canonical(dataset)
     return dataset
 
 
