@@ -15,7 +15,7 @@ def validate(config):
     if not isinstance(p, dict):
         raise ValueError("parameters must be an object")
     if (
-        not isinstance(p.get("temperature", 0), (int, float))
+        type(p.get("temperature", 0)) not in (int, float)
         or not 0 <= p.get("temperature", 0) <= 2
     ):
         raise ValueError("temperature outside [0,2]")
