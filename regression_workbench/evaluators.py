@@ -8,10 +8,20 @@ def result(score, reason, details=None):
     return {"score": float(score), "reason": reason, "details": details or {}}
 
 
+def _unique_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate JSON field")
+        value[key] = item
+    return value
+
+
 def parse_object(output):
     try:
         value = json.loads(
             output,
+            object_pairs_hook=_unique_object,
             parse_constant=lambda value: (_ for _ in ()).throw(
                 ValueError("nonfinite JSON")
             ),
