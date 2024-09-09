@@ -31,18 +31,23 @@ def parse_object(output):
         return None
 
 
+def json_equal(left, right):
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is type(right) and left == right
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(json_equal(left[k], right[k]) for k in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(json_equal(a, b) for a, b in zip(left, right))
+    return left == right
+
+
 def extraction(output, expected):
     value = parse_object(output)
     if value is None:
         return result(0, "invalid JSON object")
     matches = {
         key: key in value
-        and value[key] == item
-        and (
-            type(value[key]) is type(item)
-            if type(value[key]) is bool or type(item) is bool
-            else True
-        )
+        and json_equal(value[key], item)
         for key, item in expected.items()
     }
     return result(
@@ -87,7 +92,7 @@ def schema(output, expected):
         return checked
     errors = list(checked["details"]["errors"])
     for key, spec in expected.get("properties", {}).items():
-        if key in value and "enum" in spec and (value[key] not in spec["enum"]):
+        if key in value and "enum" in spec and not any(json_equal(value[key], option) for option in spec["enum"]):
             errors.append("invalid enum " + key)
     if expected.get("additionalProperties") is False:
         errors.extend(
@@ -132,7 +137,7 @@ def tool(output, expected):
         return checked
     args = value.get("arguments", {})
     correct = isinstance(args, dict) and all(
-        (k in args and args[k] == v for k, v in expected.get("arguments", {}).items())
+        (k in args and json_equal(args[k], v) for k, v in expected.get("arguments", {}).items())
     )
     return result(
         correct, "tool arguments", dict(checked["details"], arguments_correct=correct)
