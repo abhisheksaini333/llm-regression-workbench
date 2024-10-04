@@ -10,6 +10,10 @@ def pair(baseline, candidate):
         raise ValueError("duplicate case identity")
     if not a or a.keys() != b.keys():
         raise ValueError("comparison requires identical nonempty case sets")
+    for row in [*baseline, *candidate]:
+        score = row.get("score")
+        if type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1:
+            raise ValueError("invalid score")
     pairs = [
         {
             "case_id": key,
