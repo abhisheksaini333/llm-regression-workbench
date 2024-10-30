@@ -41,9 +41,9 @@ def pair(baseline, candidate):
 
 
 def bootstrap(values, seed=0, resamples=2000, confidence=0.95):
-    if not values or any((not math.isfinite(v) for v in values)):
+    if not values or any(type(v) not in (int, float) or not math.isfinite(v) for v in values):
         raise ValueError("finite observations required")
-    if resamples < 100 or not 0 < confidence < 1:
+    if type(resamples) is not int or not 100 <= resamples <= 100000 or type(confidence) not in (int, float) or not 0 < confidence < 1:
         raise ValueError("invalid bootstrap settings")
     rng = random.Random(seed)
     means = sorted(
