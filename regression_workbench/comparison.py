@@ -162,6 +162,14 @@ def gate(comparison, critical=None, max_overall_regression=0.02):
 
 
 def operational(results):
+    for row in results:
+        latency = row.get("latency_ms", 0)
+        if type(latency) not in (int, float) or not math.isfinite(latency) or latency < 0:
+            raise ValueError("valid latency observations required")
+        if any(type(row.get(k, 0)) is not int or row.get(k, 0) < 0 for k in ("input_tokens", "output_tokens")):
+            raise ValueError("nonnegative integer token observations required")
+        if row.get("usage_kind", "unknown") not in {"unknown", "tokens", "estimated_words"}:
+            raise ValueError("invalid usage kind")
     latencies = sorted((float(r.get("latency_ms", 0)) for r in results))
     if not latencies or any((not math.isfinite(v) or v < 0 for v in latencies)):
         raise ValueError("valid latency observations required")
