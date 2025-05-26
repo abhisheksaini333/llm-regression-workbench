@@ -144,8 +144,14 @@ def agreement(pairs, reviews, tie_threshold=0.05):
 
 
 def calibrate(pairs, reviews, thresholds=(0, 0.05, 0.1, 0.2, 0.4)):
-    if len([r for r in reviews if r["preference"] != "skip"]) < 2:
-        raise ValueError("at least two review observations required")
+    case_ids = {pair["case_id"] for pair in pairs}
+    matched = {}
+    for label in reviews:
+        if label["case_id"] in case_ids and label["preference"] in {"baseline", "candidate", "tie"}:
+            matched[(label["case_id"], label.get("reviewer", ""))] = label
+    reviews = list(matched.values())
+    if len(reviews) < 2:
+        raise ValueError("at least two matched review observations required")
     if not thresholds or any(not 0 <= v <= 1 for v in thresholds):
         raise ValueError("thresholds must be within [0,1]")
     candidates = [agreement(pairs, reviews, t) for t in thresholds]
