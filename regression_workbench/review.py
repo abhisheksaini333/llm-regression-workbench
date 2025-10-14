@@ -22,6 +22,8 @@ def save(
     note="",
     expected_revision=None,
 ):
+    if expected_revision is not None and (type(expected_revision) is not int or expected_revision < 0):
+        raise ValueError("review revision must be a nonnegative integer")
     _schema(store)
     if baseline == candidate:
         raise ValueError("distinct runs required")
