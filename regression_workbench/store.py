@@ -3,6 +3,12 @@
 import json
 import sqlite3
 import time
+import math
+
+
+def validate_lease(seconds):
+    if type(seconds) not in (int, float) or not math.isfinite(seconds) or not 0 < seconds <= 86400:
+        raise ValueError("lease must be finite and within one day")
 from .redaction import sanitize
 
 
@@ -116,9 +122,12 @@ class Store:
         ]
 
     def claim(self, run_id, owner, lease_seconds=300, now=None):
-        if lease_seconds <= 0:
-            raise ValueError("lease must be positive")
+        validate_lease(lease_seconds)
+        if not isinstance(owner, str) or not owner.strip():
+            raise ValueError("worker owner required")
         now = time.time() if now is None else now
+        if type(now) not in (int, float) or not math.isfinite(now):
+            raise ValueError("finite lease timestamp required")
         with self.connection:
             cursor = self.connection.execute(
                 "UPDATE runs SET owner=?,lease_until=?,status='running' WHERE id=? AND (owner IS NULL OR owner=? OR lease_until<=?)",

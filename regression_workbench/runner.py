@@ -31,6 +31,8 @@ def run(
     lease_seconds=300,
     sleep=time.sleep,
 ):
+    from .store import validate_lease
+    validate_lease(lease_seconds)
     datasets.validate(dataset)
     configs.validate(config)
     if type(max_attempts) is not int or not 1 <= max_attempts <= 10:
