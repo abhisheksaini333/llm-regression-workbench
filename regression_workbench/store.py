@@ -17,6 +17,9 @@ class Store:
         self.secrets = tuple(secrets)
         self.path = str(path)
         self.connection = sqlite3.connect(str(path), timeout=10)
+        if self.connection.execute("PRAGMA user_version").fetchone()[0] not in {0, 1}:
+            self.connection.close()
+            raise ValueError("unsupported workspace schema version")
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA journal_mode=WAL")
         self.connection.execute("PRAGMA foreign_keys=ON")
