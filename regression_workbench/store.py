@@ -176,11 +176,22 @@ class Store:
             and Path(path).resolve() == Path(self.path).resolve()
         ):
             raise ValueError("backup destination must differ from source")
-        target = sqlite3.connect(str(path))
+        import os
+        destination = Path(path)
         try:
-            self.connection.backup(target)
-        finally:
-            target.close()
+            descriptor = os.open(destination, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        except FileExistsError as exc:
+            raise ValueError("backup destination must not exist") from exc
+        os.close(descriptor)
+        try:
+            target = sqlite3.connect(str(destination))
+            try:
+                self.connection.backup(target)
+            finally:
+                target.close()
+        except BaseException:
+            destination.unlink(missing_ok=True)
+            raise
 
     def record_owned_attempt(self, run_id, case_id, payload, owner):
         """Fence durable retry accounting with the same lease as result writes."""
