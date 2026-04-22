@@ -1,6 +1,7 @@
 """Redaction contracts."""
 
 import re
+from urllib.parse import quote, quote_plus
 
 SENSITIVE = re.compile(
     r"(authorization|api.?key|password|secret|access.?token|refresh.?token|cookie)",
@@ -40,7 +41,9 @@ def sanitize(value, secrets=()):
             r"\1[REDACTED]",
             value,
         )
-        for secret in sorted((s for s in secrets if s), key=len, reverse=True):
+        value = re.sub(r"(?i)(https?://)[^/\s@]+@", r"\1[REDACTED]@", value)
+        variants = {variant for secret in secrets if secret for variant in (secret, quote(secret, safe=""), quote_plus(secret, safe=""))}
+        for secret in sorted(variants, key=len, reverse=True):
             value = value.replace(secret, "[REDACTED]")
         return value
     if isinstance(value, dict):
