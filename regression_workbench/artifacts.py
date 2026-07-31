@@ -1,5 +1,7 @@
 """Fetch explicitly pinned public model files without trusting cache contents."""
 import hashlib
+import os
+import tempfile
 from pathlib import Path
 from urllib.request import urlopen
 
@@ -13,13 +15,19 @@ def download(manifest, destination, fetch=urlopen):
         if Path(name).name != name or name in {".", ".."}:
             raise ValueError("artifact filename must be local")
         target = destination / name
+        if target.is_symlink():
+            raise ValueError("artifact cache cannot contain symlinks")
         if (
             target.exists()
             and hashlib.sha256(target.read_bytes()).hexdigest() == row["sha256"]
         ):
             downloaded.append(str(target))
             continue
-        temporary = target.with_suffix(target.suffix + ".partial")
+        if target.exists():
+            raise ValueError("cached artifact is corrupt; remove it before retrying")
+        descriptor, temporary_name = tempfile.mkstemp(prefix=".artifact-", dir=destination)
+        os.close(descriptor)
+        temporary = Path(temporary_name)
         digest = hashlib.sha256()
         size = 0
         try:
@@ -37,7 +45,7 @@ def download(manifest, destination, fetch=urlopen):
                         raise ValueError("artifact exceeds declared size")
             if digest.hexdigest() != row["sha256"] or size != row["bytes"]:
                 raise ValueError("artifact hash or size mismatch")
-            temporary.replace(target)
+            os.link(temporary, target)
             downloaded.append(str(target))
         finally:
             if temporary.exists():
